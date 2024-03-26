@@ -86,22 +86,24 @@ namespace BLL
                         HoTen = DOCGIA.HoTen,
                         NgaySinh = DOCGIA.NgaySinh,
                         GioiTinh = DOCGIA.GioiTinh,
-                        DiaChi = DOCGIA.DiaChi
+                        DiaChi = DOCGIA.DiaChi,
+                        MatKhau = DOCGIA.MatKhau,
+                        Quyen = DOCGIA.Quyen.ToString(),
                     };
 
 
         return query.ToList();
     }
     // Thêm độc giả
-    public bool InsertDocGia(string HoTen, DateTime NgaySinh, string GioiTinh, string DiaChi)
+    public bool InsertDocGia(string HoTen, DateTime NgaySinh, string GioiTinh, string DiaChi , string matkhau = "123", int quyen = 3)
     {
         DOCGIA docgia = new DOCGIA();
         docgia.HoTen = HoTen;
         docgia.NgaySinh = NgaySinh;
         docgia.GioiTinh = GioiTinh;
         docgia.DiaChi = DiaChi;
-        docgia.MatKhau = "123";
-        docgia.Quyen = 1;
+        docgia.MatKhau = matkhau;
+        docgia.Quyen = quyen;
         try
         {
             DB.DOCGIAs.InsertOnSubmit(docgia);
@@ -115,7 +117,7 @@ namespace BLL
         }
     }
     // Sửa độc giả
-    public bool UpdateDocGia(int MaDocGia, string HoTen, DateTime NgaySinh, string GioiTinh, string DiaChi)
+    public bool UpdateDocGia(int MaDocGia, string HoTen, DateTime NgaySinh, string GioiTinh, string DiaChi, string matkhau = "123" , int quyen = 3)
     {
         DOCGIA docgia = DB.DOCGIAs.Where(dg => dg.MaDocGia == MaDocGia).FirstOrDefault();
         if (docgia != null)
@@ -124,8 +126,8 @@ namespace BLL
             docgia.NgaySinh = NgaySinh;
             docgia.GioiTinh = GioiTinh;
             docgia.DiaChi = DiaChi;
-            docgia.MatKhau = "123";
-            docgia.Quyen = 1;
+            docgia.MatKhau = matkhau;
+            docgia.Quyen = quyen;
             DB.SubmitChanges();
             return true;
         }

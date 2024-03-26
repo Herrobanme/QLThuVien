@@ -1,4 +1,5 @@
 ﻿using BLL;
+using DAL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -43,6 +44,8 @@ namespace GUI
             gridview.Columns[2].HeaderText = "Ngày sinh";
             gridview.Columns[3].HeaderText = "Giới tính";
             gridview.Columns[4].HeaderText = "Địa chỉ";
+            gridview.Columns[5].HeaderText = "Mật Khẩu";
+            gridview.Columns[6].HeaderText = "Quyền";
             //Nếu datagridview không có dòng dữ liệu nào thì các textbox sẽ trắng
             if (gridview.Rows.Count == 0)
             {
@@ -59,6 +62,8 @@ namespace GUI
                 dtNgaySinh.Text = row.Cells[2].Value?.ToString();
                 cboGioiTinh.Text = row.Cells[3].Value?.ToString();
                 txtDiaChi.Text = row.Cells[4].Value?.ToString();
+                txtMatkhau.Text = row.Cells[5].Value?.ToString();
+                txtQuyen.Text = row.Cells[6].Value?.ToString();
             }
         }
         //Lấy danh sách giới tính nam hoặc nữ lên combobox
@@ -80,6 +85,8 @@ namespace GUI
             txtMaDocGia.Text = "";
             txtHoTen.Text = "";
             txtDiaChi.Text = "";
+            txtMatkhau.Text = "";
+            txtQuyen.Text = "";
             boolcontrols(false);
             //lưu == true là bấm Thêm xong bấm Lưu
             luu = true;
@@ -99,6 +106,8 @@ namespace GUI
             btnTim.Enabled = iss;
             txtHoTen.Enabled = !iss;
             txtDiaChi.Enabled = !iss;
+            txtMatkhau.Enabled = !iss;
+            txtQuyen.Enabled = !iss;
             dtNgaySinh.Enabled = !iss;
             cboGioiTinh.Enabled = !iss;
         }
@@ -147,6 +156,10 @@ namespace GUI
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
+            txtHoTen.Text = txtHoTen.Text.TrimStart().TrimEnd();
+            txtMatkhau.Text = txtMatkhau.Text.TrimStart().TrimEnd();
+            txtDiaChi.Text = txtDiaChi.Text.TrimStart().TrimEnd();
+            txtQuyen.Text = txtQuyen.Text.TrimStart().TrimEnd();
             //kiểm tra đã nhập họ tên hay chưa
             if (txtHoTen.Text.Trim() == "")
             {
@@ -155,11 +168,43 @@ namespace GUI
                 txtHoTen.Focus();
                 return;
             }
+            if (txtMatkhau.Text.Trim() == "")
+
+            {
+                MessageBox.Show("Mật khẩu không được trống hoặc khoảng trắng", "Thông báo",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtMatkhau.Focus();
+                return;
+            }
+            if (txtDiaChi.Text.Trim() == "")
+            {
+                MessageBox.Show("Địa chỉ không được trống hoặc khoảng trắng", "Thông báo",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtDiaChi.Focus();
+                return;
+            }
+            if (txtQuyen.Text.Trim() == "")
+            {
+                MessageBox.Show("Quyền không được trống hoặc khoảng trắng", "Thông báo",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtQuyen.Focus();
+                return;
+            }
+
+            if (dtNgaySinh.Value > DateTime.Now)
+            {
+                MessageBox.Show("Ngày sinh không được lớn hơn ngày hiện tại", "Thông báo",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                dtNgaySinh.Focus();
+                return;
+            }
+
             //lưu == true tức là Thêm
             if (luu == true)
             {
+                int quyen = int.Parse(txtQuyen.Text);
                 //tiến hành thêm
-                bool result = bll_docgia.InsertDocGia(txtHoTen.Text, dtNgaySinh.Value, cboGioiTinh.Text, txtDiaChi.Text);
+                bool result = bll_docgia.InsertDocGia(txtHoTen.Text, dtNgaySinh.Value, cboGioiTinh.Text, txtDiaChi.Text, txtMatkhau.Text, quyen);
                 if (result) //thêm thành công
                 {
                     MessageBox.Show("Thêm thành công !", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -231,6 +276,7 @@ namespace GUI
                 txtDiaChi.Text = row.Cells[4].Value?.ToString();
             }
         }
+
     }
 }
    
